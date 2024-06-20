@@ -1,3 +1,4 @@
 pillow
 pyimgur
 langchain_community
+mss
