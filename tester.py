@@ -6,6 +6,7 @@ from datetime import datetime
 from mss import mss
 from openai import AzureOpenAI
 import pdb
+from prompts import PREPROMPT, get_prompt
 
 from config import (
     IMAGE_LOCATION,
@@ -17,30 +18,12 @@ from config import (
 )
 
 
-PREPROMPT = (
-    "You are a regression tester. Examine the provided screenshot and verify the placement of the UI elements "
-    "based on the criteria listed below. Respond only with 'LGTM'(and nothing more) if all elements are "
-    "correctly placed according to the specifications. If any discrepancies are "
-    "found, list them using bullet points."
-)
-
-
 class Tester:
-    def get_prompt(self, items):
-        prompt = (
-            "\n\nCheck if the following statements are true for the received image:"
-        )
-
-        for item in items:
-            prompt += f"\n- '{item}'"
-
-        return (
-            prompt
-            + "\n\nRemember to respond with 'LGTM' and nothing more if you find all the above checks to be true."
-        )
-
     def analyze_screenshot(self, image_path, check_items):
-        prompt = self.get_prompt(check_items)
+        prompt = get_prompt(check_items)
+
+        print(prompt)
+        return ''
 
         client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_KEY"),
