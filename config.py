@@ -2,12 +2,12 @@ import os
 from enum import Enum
 
 
-class IMAGE_LOCATION(Enum):
-    LOCAL = 1
-    URL = 2
+class MODES(Enum):
+    DEBUG = 1
+    FULL = 2
 
 
-IMAGE_MODE = IMAGE_LOCATION.URL
+MODE = MODES.DEBUG
 
 CLIENT_ID = os.environ.get("IMGUR_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("IMGUR_CLIENT_SECRET")

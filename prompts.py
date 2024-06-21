@@ -5,10 +5,9 @@ PREPROMPT = (
     "found, list them using bullet points."
 )
 
+
 def get_prompt(items):
-    prompt = (
-        "\n\nCheck if the following statements are true for the received image:"
-    )
+    prompt = "\n\nCheck if the following statements are true for the received image:"
 
     for item in items:
         prompt += f"\n- '{item}'"
@@ -17,4 +16,3 @@ def get_prompt(items):
         prompt
         + "\n\nRemember to respond with 'LGTM' and nothing more if you find all the above checks to be true."
     )
-
