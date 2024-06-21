@@ -9,7 +9,7 @@ class OllamaEngine:
 
         response_w_metadata = ollama.generate(
             model=OLLAMA_MODEL_NAME,
-            prompt=prompt,
+            prompt=f"{PREPROMPT}\n{prompt}",
             images=[image_path],
             stream=False,
         )
