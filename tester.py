@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 from mss import mss
 from openai import AzureOpenAI
+import pdb
 
 from config import (
     IMAGE_LOCATION,
@@ -16,6 +17,21 @@ from config import (
 
 
 class Tester:
+    def get_prompt(self, items):
+        prompt = (
+            "Examine the provided screenshot and verify the placement of the UI elements "
+            "based on the criteria listed below. Respond with 'LGTM' if all elements are "
+            "correctly placed according to the specifications. If any discrepancies are "
+            "found, list them using bullet points."
+        )
+
+        prompt += "\n\nChecklist:"
+
+        for item in items:
+            prompt += f"\n- '{item}'"
+
+        return prompt
+
     # TODO: Add model api factory: azure-openai vs ollama
     #    def analyze_screenshot(self, image_path):
     #        response_w_metadata = ollama.generate(
@@ -26,9 +42,13 @@ class Tester:
     #        )
     #
     #        return response_w_metadata["response"]
-    def analyze_screenshot(self, image_path):
+    def analyze_screenshot(self, image_path, check_items):
+        prompt = self.get_prompt(check_items)
+
+        pdb.set_trace()
+
         # TODO: rm
-        return ''
+        return ""
 
         client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_KEY"),
@@ -51,7 +71,7 @@ class Tester:
                     ],
                 },
             ],
-            max_tokens=2000,
+            max_tokens=200,
         )
 
         print(response)
@@ -82,17 +102,13 @@ class Tester:
 
         return DESTINATION_PATH
 
-    def run(self, step):
-        print('Testing... ' + step['description'])
-        return '' # TODO: rm
-
-
+    def run(self, test_step):
         # screenshot_path = self.take_screenshot()
         screenshot_path = "https://i.imgur.com/3UbLnyX.jpeg"
 
         if IMAGE_MODE == IMAGE_LOCATION.LOCAL:
             print("Analysing image...")
-            response = self.analyze_screenshot(screenshot_path)
+            response = self.analyze_screenshot(screenshot_path, test_step["checks"])
 
             print(response)
 
