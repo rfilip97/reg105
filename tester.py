@@ -4,6 +4,7 @@ import pyimgur
 import time
 from datetime import datetime
 from mss import mss
+from openai import AzureOpenAI
 
 from config import (
     IMAGE_LOCATION,
@@ -15,15 +16,44 @@ from config import (
 
 
 class Tester:
+    # TODO: Add model api factory: azure-openai vs ollama
+    #    def analyze_screenshot(self, image_path):
+    #        response_w_metadata = ollama.generate(
+    #            model=OLLAMA_MODEL_NAME,
+    #            prompt="What do you see in this image?",
+    #            images=[image_path],
+    #            stream=False,
+    #        )
+    #
+    #        return response_w_metadata["response"]
     def analyze_screenshot(self, image_path):
-        response_w_metadata = ollama.generate(
-            model=OLLAMA_MODEL_NAME,
-            prompt="What do you see in this image?",
-            images=[image_path],
-            stream=False,
+        client = AzureOpenAI(
+            api_key=os.getenv("AZURE_OPENAI_KEY"),
+            api_version="2023-03-15-preview",
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
         )
 
-        return response_w_metadata["response"]
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "Describe this picture:"},
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": image_path},
+                        },
+                    ],
+                },
+            ],
+            max_tokens=2000,
+        )
+
+        print(response)
+
+        return response
 
     # Not used yet
     def upload_image(self, image_path):
@@ -50,7 +80,8 @@ class Tester:
         return DESTINATION_PATH
 
     def run(self):
-        screenshot_path = self.take_screenshot()
+        # screenshot_path = self.take_screenshot()
+        screenshot_path = "https://i.imgur.com/3UbLnyX.jpeg"
 
         if IMAGE_MODE == IMAGE_LOCATION.LOCAL:
             print("Analysing image...")

@@ -2,3 +2,7 @@ pillow
 pyimgur
 langchain_community
 mss
+timm
+torch
+openai
+langchain_openai
