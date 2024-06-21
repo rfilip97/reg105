@@ -1,0 +1,90 @@
+{
+  "name": "Log In Process Test",
+  "start-url": "https://www.mgmplus.com/login",
+  "steps": [
+    {
+      "step_number": 1,
+      "description": "Navigate to the login page",
+      "type": "action", 
+      "action": {
+        "type": "navigate",
+        "url": "https://www.mgmplus.com/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "description": "Verify navigation bar elements",
+      "type": "check", 
+      "checks": [
+        "The MGM+ logo should be located at the top left.",
+        "The Browser/Movies and LiveTV sections should be right of the MGM+ logo.",
+        "The Search icon should be present at the top right.",
+        "The Log In button should be at the top right.",
+        "The Subscribe button should be located at the top right."
+      ]
+    },
+    {
+      "step_number": 3,
+      "description": "Verify Log In form fields",
+      "type": "check", 
+      "checks": [
+        "The Email field should be present.",
+        "The Password field should be present.",
+        "The Forgot your password button should be located under the Password field."
+      ]
+    },
+    {
+      "step_number": 4,
+      "description": "Verify buttons and their logos",
+      "type": "check", 
+      "checks": [
+        "The Log in button should be yellow and have no logo.",
+        "The Log in with Amazon button should feature the Amazon logo.",
+        "The Sign in with Google button should feature the Google logo.",
+        "The Sign in with Apple button should feature the Apple logo."
+      ]
+    },
+    {
+      "step_number": 5,
+      "description": "Enter valid credentials in the email and password fields",
+      "type": "action", 
+      "action": {
+        "type": "input",
+        "fields": {
+          "email": "user@example.com",
+          "password": "password123"
+        }
+      }
+    },
+    {
+      "step_number": 6,
+      "description": "Press the Log In button",
+      "type": "action", 
+      "action": {
+        "type": "click",
+        "target": "Log In button"
+      }
+    },
+    {
+      "step_number": 7,
+      "description": "Check if user is logged in and redirected",
+      "type": "check", 
+      "checks": [
+        "The user should be redirected to https://www.mgmplus.com/browse after logging in."
+      ]
+    },
+    {
+      "step_number": 8,
+      "description": "Navigate to and verify profile page",
+      "type": "action", 
+      "action": {
+        "type": "navigate",
+        "url": "https://www.mgmplus.com/profile"
+      },
+      "checks": [
+        "The email displayed on the profile page should match the one used at log in."
+      ]
+    }
+  ]
+}
+

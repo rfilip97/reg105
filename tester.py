@@ -27,6 +27,9 @@ class Tester:
     #
     #        return response_w_metadata["response"]
     def analyze_screenshot(self, image_path):
+        # TODO: rm
+        return ''
+
         client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_KEY"),
             api_version="2023-03-15-preview",
@@ -79,7 +82,11 @@ class Tester:
 
         return DESTINATION_PATH
 
-    def run(self):
+    def run(self, step):
+        print('Testing... ' + step['description'])
+        return '' # TODO: rm
+
+
         # screenshot_path = self.take_screenshot()
         screenshot_path = "https://i.imgur.com/3UbLnyX.jpeg"
 
