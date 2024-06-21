@@ -13,42 +13,33 @@ from config import (
     TMP_CONFIG_PATH,
     SCREENSHOT_DELAY_SECONDS,
     OLLAMA_MODEL_NAME,
+    CLIENT_ID,
+)
+
+
+PREPROMPT = (
+    "You are a regression tester. Examine the provided screenshot and verify the placement of the UI elements "
+    "based on the criteria listed below. Respond only with 'LGTM'(and nothing more) if all elements are "
+    "correctly placed according to the specifications. If any discrepancies are "
+    "found, list them using bullet points."
 )
 
 
 class Tester:
     def get_prompt(self, items):
         prompt = (
-            "Examine the provided screenshot and verify the placement of the UI elements "
-            "based on the criteria listed below. Respond with 'LGTM' if all elements are "
-            "correctly placed according to the specifications. If any discrepancies are "
-            "found, list them using bullet points."
+            "\n\nCheck if the following statements are true for the received image:"
         )
-
-        prompt += "\n\nChecklist:"
 
         for item in items:
             prompt += f"\n- '{item}'"
 
+        prompt += "\n\nRemember to respond with 'LGTM' and nothing more if you don't find any problems."
+
         return prompt
 
-    # TODO: Add model api factory: azure-openai vs ollama
-    #    def analyze_screenshot(self, image_path):
-    #        response_w_metadata = ollama.generate(
-    #            model=OLLAMA_MODEL_NAME,
-    #            prompt="What do you see in this image?",
-    #            images=[image_path],
-    #            stream=False,
-    #        )
-    #
-    #        return response_w_metadata["response"]
     def analyze_screenshot(self, image_path, check_items):
         prompt = self.get_prompt(check_items)
-
-        pdb.set_trace()
-
-        # TODO: rm
-        return ""
 
         client = AzureOpenAI(
             api_key=os.getenv("AZURE_OPENAI_KEY"),
@@ -59,11 +50,11 @@ class Tester:
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": PREPROMPT},
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "Describe this picture:"},
+                        {"type": "text", "text": prompt},
                         {
                             "type": "image_url",
                             "image_url": {"url": image_path},
@@ -74,14 +65,14 @@ class Tester:
             max_tokens=200,
         )
 
-        print(response)
+        print(response.choices[0])
 
-        return response
+        return response.choices[0]
 
     # Not used yet
     def upload_image(self, image_path):
-        image = pyimgur.Imgur(CLIENT_ID)
-        uploaded_image = image.upload_image(image, title="Uploaded with PyImgur")
+        img = pyimgur.Imgur(CLIENT_ID)
+        uploaded_image = img.upload_image(image_path, title="Uploaded with PyImgur")
 
         return uploaded_image.link
 
@@ -103,15 +94,12 @@ class Tester:
         return DESTINATION_PATH
 
     def run(self, test_step):
-        # screenshot_path = self.take_screenshot()
-        screenshot_path = "https://i.imgur.com/3UbLnyX.jpeg"
+        screenshot_path = self.take_screenshot()
 
-        if IMAGE_MODE == IMAGE_LOCATION.LOCAL:
-            print("Analysing image...")
-            response = self.analyze_screenshot(screenshot_path, test_step["checks"])
+        if IMAGE_MODE == IMAGE_LOCATION.URL:
+            screenshot_path = self.upload_image(screenshot_path)
 
-            print(response)
+        response = self.analyze_screenshot(screenshot_path, test_step["checks"])
+        print(response)
 
-            return response
-        else:
-            print("WIP")
+        return response
