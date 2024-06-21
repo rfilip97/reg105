@@ -1,0 +1,19 @@
+{
+  "name": "Home Page",
+  "start-url": "https://www.mgmplus.com",
+  "steps": [
+    {
+      "step_number": 1,
+      "description": "Verify navigation bar elements",
+      "type": "check",
+      "checks": [
+        "The MGM+ logo should be located at the top left.",
+        "The Browser/Movies and LiveTV sections should be right of the MGM+ logo.",
+        "The Search icon should be present at the top right.",
+        "The Log In button should be at the top right.",
+        "The Subscribe button should be located at the top right."
+      ]
+    }
+  ]
+}
+

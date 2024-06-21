@@ -34,9 +34,10 @@ class Tester:
         for item in items:
             prompt += f"\n- '{item}'"
 
-        prompt += "\n\nRemember to respond with 'LGTM' and nothing more if you don't find any problems."
-
-        return prompt
+        return (
+            prompt
+            + "\n\nRemember to respond with 'LGTM' and nothing more if you find all the above checks to be true."
+        )
 
     def analyze_screenshot(self, image_path, check_items):
         prompt = self.get_prompt(check_items)
@@ -69,7 +70,6 @@ class Tester:
 
         return response.choices[0]
 
-    # Not used yet
     def upload_image(self, image_path):
         img = pyimgur.Imgur(CLIENT_ID)
         uploaded_image = img.upload_image(image_path, title="Uploaded with PyImgur")

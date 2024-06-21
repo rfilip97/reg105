@@ -1,6 +1,6 @@
 {
   "name": "Log In Process Test",
-  "start-url": "https://www.mgmplus.com/login",
+  "start-url": "https://www.mgmplus.com",
   "steps": [
     {
       "step_number": 1,

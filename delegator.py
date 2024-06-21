@@ -9,7 +9,7 @@ class Delegator:
         self.tester = Tester()
 
     def run(self):
-        with open("./scenarios/app_sections/main_page/login.json", "r") as file:
+        with open("./scenarios/app_sections/main_page/home.json", "r") as file:
             data = json.load(file)
             for test_step in data["steps"]:
                 if test_step["type"] == "action":
