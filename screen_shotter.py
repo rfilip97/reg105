@@ -4,12 +4,20 @@ import time
 from mss import mss
 import pyimgur
 
-from config import TMP_CONFIG_PATH, SCREENSHOT_DELAY_SECONDS, CLIENT_ID, MODE, MODES
+from config import (
+    TMP_CONFIG_PATH,
+    SCREENSHOT_DELAY_SECONDS,
+    CLIENT_ID,
+    MODE,
+    MODES,
+    LLM_ENGINE,
+    LLM_ENGINES,
+)
 
 
 def take_screenshot():
     if MODE == MODES.DEBUG:
-        return ""
+        return "./tmp/20240620-121650.png"
 
     if not os.path.exists(TMP_CONFIG_PATH):
         os.makedirs(TMP_CONFIG_PATH)
@@ -31,6 +39,9 @@ def take_screenshot():
 
 
 def upload_image(image_path):
+    if LLM_ENGINE == LLM_ENGINES.OLLAMA:
+        return image_path
+
     if MODE == MODES.DEBUG:
         return "https://i.imgur.com/4mMzFtj.jpeg"
 
